@@ -17,7 +17,7 @@ const validateTweet = [
 // 해당 아이디에 대한 트윗 가져오기
 // GET
 // http://localhost:8080/tweets?username=:username
-router.get('/', isAuth, tweetController.getTweet);
+router.get('/', isAuth, tweetController.getTweets);
 
 
 // 글번호에 대한 트윗 가져오기

@@ -1,14 +1,14 @@
 import * as tweetRepository from '../data/tweet.js';
 
-// 여러 트윗을 가져오는 함수
+
+// 여러 트윗을 가져오는 함수, username을 argument로 설정
 export async function getTweets(req, res){
     const username = req.query.username;
-    const data = await (username ? tweetRepository.getAllByUsername(username)
-                                 : tweetRepository.getAll());
+    const data = await (username ? tweetRepository.getAllByUsername(username) : tweetRepository.getAll());
     res.status(200).json(data);
 }
 
-// 하나의 트윗을 가져오는 함수
+// 하나의 트윗을 가져오는 함수, id를 argument로 설정
 export async function getTweet(req, res, next) {
     const id = req.params.id;
     const tweet = await tweetRepository.getById(id);

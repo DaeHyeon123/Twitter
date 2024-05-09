@@ -1,31 +1,27 @@
-import { db } from '../db/database.js';
+import MongoDB from 'mongodb';
+import { getUsers } from '../db/database.js';
+
+const ObjectID = MongoDB.ObjectId;
 
 // 아이디(username) 중복검사
 export async function findByUsername(username){
-    return db.execute('select * from users where username = ?', [username]).then((result) => {
-        console.log(result);
-        return result[0][0];
-    });
+    return getUsers().find({username}).next().then(mapOptionalUser);
 }
 
 // id 중복검사
 export async function findById(id){
-    return db.execute('select * from users where id = ?', [id]).then((result) => {
-        console.log(result);
-        return result[0][0];
-    });
+    return getUsers().find({_id: new ObjectID(id)}).next().then(mapOptionalUser);
 }
 
 export async function createUser(user){
-    console.log(user);
-    const {username, hashed, name, email, url} = user;
-    return db.execute('insert into users (username, password, name, email, url) values (?, ?, ?, ?, ?)', [username, hashed, name, email, url]).then((result) => {
-        console.log(result);    // result[0].insertId
-        return result[0].insertId;
-    });
+    return getUsers().insertOne(user).then((result) => console.log(result.insertedId.toString()));
 }
 
 // export async function login(username){
 //     const user = users.find((user) => user.username === username)
 //     return user;
 // }
+
+function mapOptionalUser(user){
+    return user ? { ...user, id: user._id.toString() } : user;
+}
